@@ -18,14 +18,14 @@
 1. Set your database credentials in your `.env` file
 1. Create the database and table with the following script
    ```sh
-      CREATE DATABASE  IF NOT EXISTS `indra`
+      CREATE DATABASE  IF NOT EXISTS `indra`;
       USE `indra`;
       CREATE TABLE `products` (
          `id` int NOT NULL AUTO_INCREMENT,
          `name` varchar(250) DEFAULT NULL,
          `description` varchar(250) DEFAULT NULL,
          PRIMARY KEY (`id`)
-      )
+      );
    ```
 
 ## Running the app
