@@ -1,0 +1,70 @@
+service: indra
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+
+package:
+  individually: true
+  excludeDevDependencies: true
+
+functions:
+  findProducts:
+    handler: src/products/functions/find-products.handler
+    package:
+      patterns:
+        - "!node_modules/axios/**"
+    environment:
+      DB_NAME: ${env:DB_NAME}
+      DB_HOST: ${env:DB_HOST}
+      DB_USER: ${env:DB_USER}
+      DB_PASSWORD: ${env:DB_PASSWORD}
+    events:
+      - http:
+          path: products
+          method: GET
+          cors: true
+          documentation: ${file(serverless.doc.yml):endpoints.findProducts}
+
+  createProduct:
+    handler: src/products/functions/create-product.handler
+    package:
+      patterns:
+        - "!node_modules/axios/**"
+    environment:
+      DB_NAME: ${env:DB_NAME}
+      DB_HOST: ${env:DB_HOST}
+      DB_USER: ${env:DB_USER}
+      DB_PASSWORD: ${env:DB_PASSWORD}
+    events:
+      - http:
+          path: products
+          method: POST
+          cors: true
+          documentation: ${file(serverless.doc.yml):endpoints.createProduct}
+
+  findPlanets:
+    handler: src/planets/functions/find-planets.handler
+    package:
+      patterns:
+        - "!node_modules/mysql2/**"
+    environment:
+      SWAPI_URL: ${env:SWAPI_URL}
+    events:
+      - http:
+          path: planets
+          method: GET
+          cors: true
+          documentation: ${file(serverless.doc.yml):endpoints.findPlanets}
+
+useDotenv: true
+
+custom:
+  documentation: ${file(serverless.doc.yml):documentation}
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-openapi-documentation

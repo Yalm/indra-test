@@ -1,0 +1,154 @@
+documentation:
+  version: "1"
+  title: "Indra API"
+  models:
+    - name: "FindProductsResponse"
+      contentType: "application/json"
+      schema:
+        $schema: "http://json-schema.org/draft-04/schema#"
+        properties:
+          results:
+            type: "array"
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                name:
+                  type: string
+                description:
+                  type: string
+          count:
+            type: "number"
+          next:
+            type: "number"
+          previous:
+            type: "number"
+    - name: "FindPlanetsResponse"
+      contentType: "application/json"
+      schema:
+        $schema: "http://json-schema.org/draft-04/schema#"
+        properties:
+          results:
+            type: "array"
+            items:
+              type: object
+              properties:
+                clima:
+                  type: string
+                creado:
+                  type: string
+                diametro:
+                  type: string
+                editado:
+                  type: string
+                peliculas:
+                  type: "array"
+                  items:
+                    type: string
+                gravedad:
+                  type: string
+                nombre:
+                  type: string
+                periodo_orbital:
+                  type: string
+                poblacion:
+                  type: string
+                residentes:
+                  type: "array"
+                  items:
+                    type: string
+                periodo_de_rotacion:
+                  type: string
+                superficie_del_agua:
+                  type: string
+                terreno:
+                  type: string
+                url:
+                  type: string
+          count:
+            type: "number"
+    - name: "CreateProductRequest"
+      contentType: "application/json"
+      schema:
+        $schema: "http://json-schema.org/draft-04/schema#"
+        properties:
+          name:
+            type: "string"
+          description:
+            type: "string"
+    - name: "CreateProductResponse"
+      contentType: "application/json"
+      schema:
+        $schema: "http://json-schema.org/draft-04/schema#"
+        properties:
+          id:
+            type: "number"
+          name:
+            type: "string"
+          description:
+            type: "string"
+    - name: "ErrorResponse"
+      contentType: "application/json"
+      schema:
+        $schema: "http://json-schema.org/draft-04/schema#"
+        properties:
+          errors:
+            type: array
+            items:
+              type: string
+
+endpoints:
+  findProducts:
+    summary: "Retrieve a list of products"
+    queryParams:
+      - name: "nextCursor"
+        description: "Show products after the specified ID."
+        schema:
+          type: "string"
+      - name: "prevCursor"
+        description: "Show products before the specified ID."
+        schema:
+          type: "string"
+      - name: "limit"
+        description: "The maximum number of results to show on a page."
+        schema:
+          type: "string"
+    methodResponses:
+      - statusCode: 400
+        responseModels:
+          application/json: "ErrorResponse"
+      - statusCode: 200
+        responseModels:
+          application/json: "FindProductsResponse"
+
+  findPlanets:
+    summary: "Retrieve a list of planets"
+    queryParams:
+      - name: "page"
+        description: "Page number of the results to fetch."
+        schema:
+          type: "string"
+      - name: "name"
+        description: "Filter planets by name."
+        schema:
+          type: "string"
+    methodResponses:
+      - statusCode: 400
+        responseModels:
+          application/json: "ErrorResponse"
+      - statusCode: 200
+        responseModels:
+          application/json: "FindPlanetsResponse"
+
+  createProduct:
+    summary: "Create Product"
+    requestModels:
+      application/json: "CreateProductRequest"
+    methodResponses:
+      - statusCode: 400
+        responseModels:
+          application/json: "ErrorResponse"
+      - statusCode: 201
+        responseModels:
+          application/json: "CreateProductResponse"
